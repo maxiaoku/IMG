@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name=viewport content="width=device-width,initial-scale=1">
+	<title>DANIAO - 云端目录</title>
+	<link href="//s0.pstatp.com/cdn/expire-1-M/dplayer/1.25.0/DPlayer.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&family=Roboto&family=Zhi+Mang+Xing&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.3/css/mdui.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/viewerjs@1.5.0/dist/viewer.min.css">
+	<link rel="icon" type="image/png" href="https://s1.ax1x.com/2020/05/26/tiEs3T.png">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-158371937-5"></script>
+	<style type="text/css">
+		body {
+			background-color: #f7f7f9;
+			color: #000;
+			font-size: 16px;
+			font-family: 'Noto Serif JP', serif;
+			font-family: 'Roboto', sans-serif;
+			line-height: 1em
+		}
+
+		a {
+			color: #24292e;
+			text-decoration: none;
+			cursor: pointer
+		}
+
+		a:hover {
+			color: #24292e
+		}
+
+		div,
+		textarea {
+			border-radius: 15px
+		}
+
+		#dplayer,
+		#dplayerContainer,
+		#imageBox,
+		.dplayer-video-wrap {
+			border-radius: unset
+		}
+
+		#dplayerContainer {
+			background-color: #000
+		}
+
+		.title {
+			margin-top: 0.5rem;
+			margin-bottom: 0.5rem;
+			text-align: center;
+			letter-spacing: 2px
+		}
+
+		.title a {
+			color: #333;
+			text-decoration: none;
+			font-size: 150%
+		}
+
+		.list-wrapper {
+			position: relative;
+			margin: 0 auto 40px;
+			width: 80%;
+			box-shadow: 0 0 32px 0 rgba(0, 0, 0, .1)
+		}
+
+		.list-container {
+			position: relative;
+			overflow: hidden
+		}
+
+		.list-header-container {
+			position: relative
+		}
+
+		.list-header-container a.back-link {
+			position: absolute;
+			display: inline-block;
+			margin: 20px 10px;
+			padding: 10px 10px;
+			color: #000;
+			vertical-align: middle;
+			text-decoration: none;
+			font-size: 16px
+		}
+
+		.list-container,
+		.list-header-container,
+		.list-wrapper,
+		a.back-link:hover,
+		body {
+			color: #24292e
+		}
+
+		.list-header-container .table-header {
+			margin: 0;
+			padding: 13px 20px;
+			border: 0 none;
+			background-color: #f7f7f9;
+			color: #000;
+			text-align: left;
+			font-weight: 400;
+			line-height: 1.3em
+		}
+
+		.list-body-container {
+			position: relative;
+			left: 0;
+			overflow-x: hidden;
+			overflow-y: auto;
+			box-sizing: border-box;
+			background: #fff
+		}
+
+		.list-table {
+			padding: 10px;
+			width: 100%;
+			border-spacing: 0
+		}
+
+		.list-table tr {
+			height: 40px
+		}
+
+		.list-table tr.item:hover {
+			background: #f1f1f1
+		}
+
+		.list-table tr:first-child {
+			background: #fff
+		}
+
+		.list-table td,
+		.list-table th {
+			overflow: hidden;
+			padding: 0 10px;
+			max-width: 5em;
+			text-align: left;
+			text-overflow: ellipsis;
+			white-space: nowrap
+		}
+
+		.list-table .file ion-icon {
+			margin-right: 0;
+			vertical-align: bottom;
+			font-size: 15px
+		}
+
+		.list-table .file:hover {
+			overflow: visible;
+			text-overflow: clip;
+			white-space: normal;
+			font-weight: 700
+		}
+
+		.list-table .size {
+			width: 13%;
+			border-radius: 0 25px 25px 0
+		}
+
+		.list-table .updated_at {
+			width: 20%
+		}
+
+		.list-table .file {
+			border-radius: 25px 0 0 25px
+		}
+
+		@media only screen and (max-width:480px) {
+			body {
+				margin: 5px
+			}
+
+			.title {
+				margin-bottom: 24px;
+				font-size: 1.5em
+			}
+
+			.list-wrapper {
+				margin-bottom: 24px;
+				width: 100%
+			}
+
+			.list-table {
+				padding: 1em 0
+			}
+
+			.list-table .updated_at {
+				display: none
+			}
+		}
+
+		.list-table .size,
+		.list-table .updated_at {
+			text-align-last: right
+		}
+
+		.search-container {
+			padding: 0 15px 10px
+		}
+
+		#search {
+			box-sizing: border-box;
+			padding: 5px 5px;
+			width: 100%;
+			outline: 0;
+			border: 0 none;
+			border-radius: 15px;
+			background-color: #fff;
+			color: #000;
+			text-align: left;
+			font-size: inherit
+		}
+
+
+		#back {
+			position: absolute;
+			top: 0;
+			right: 0;
+			display: inline-table;
+			padding: 27px 20px 0 0px;
+			vertical-align: middle;
+			font-size: 16px;
+			cursor: pointer
+		}
+
+		button#closevideo {
+			position: relative;
+			margin-right: 0;
+			margin-left: 0;
+			width: 36px;
+			height: 36px;
+			border: none;
+			background: 0 0;
+			cursor: pointer
+		}
+
+		span.icon-cross {
+			position: absolute;
+			width: 24px;
+			line-height: 24px;
+			transform: translate(-12px, -12px)
+		}
+
+		#imageBox {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 999;
+			display: table;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, .7);
+			text-align: center
+		}
+
+		#imageBoxContainer {
+			position: absolute;
+			top: 50%;
+			width: 100%;
+			text-align: center;
+			-webkit-transform: translate3D(0, -50%, 0);
+			transform: translate3D(0, -50%, 0)
+		}
+
+		#imageBoxImage {
+			display: table-cell;
+			margin: 0 auto;
+			width: auto;
+			max-width: 80%;
+			vertical-align: middle;
+			text-align: center
+		}
+
+		i {
+			margin-right: 2px;
+		}
+
+		footer {
+			height: 30px;
+			background-color: #eee;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div style="min-height: calc(100vh - 57px);">
+		<h1 class="title">
+			<a onclick="Goto(RootPath);" style="font-family: 'Zhi Mang Xing', cursive; font-weight: 100;">私人下载站</a>
+		</h1>
+		<div class="list-wrapper">
+			<div class="list-container">
+				<div class="list-header-container">
+					<h3 class="table-header mdui-typo-body-1-opacity">OneList Local Path</h3>
+					<i id="back" onclick="Goto(Back());" class="mdui-icon material-icons">keyboard_backspace</i>
+					<div class="search-container">
+						<input id="search" oninput="Search();" placeholder="Search" />
+					</div>
+				</div>
+				<div class="list-body-container">
+					<table class="list-table">
+						<tr class="list-title">
+							<th class="file" onclick="View('name');">文件</th>
+							<th class="updated_at" onclick="View('date');">时间</th>
+							<th class="size" onclick="View('size');">大小</th>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade bd-example-modal-xl" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+					<button id="dclose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="dplayer"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="mdui-center mdui-text-center">
+		<p class="mdui-typo-caption-opacity" style="padding-top: 5px; margin-bottom: 0;margin-top: 19px;">由 Microsoft
+			OneDrive <svg t="1590488795575" class="icon" viewBox="0 0 1024 1024" version="1.1"
+				xmlns="http://www.w3.org/2000/svg" p-id="2990" width="24">
+				<path d="M609.09 584.818S824 437.872 828.636 438.187a318.602 318.602 0 0 0-574.75-96.095h3.252z"
+					fill="#0364B8" p-id="2991"></path>
+				<path
+					d="M391.025 380.054a253.576 253.576 0 0 0-133.887-37.962h-3.253A254.862 254.862 0 0 0 48.078 742.59l342.559-36.41 214.4-197.942z"
+					fill="#0F78D4" p-id="2992"></path>
+				<path
+					d="M828.636 438.187a205.225 205.225 0 0 0-13.981-0.51 206.463 206.463 0 0 0-82.09 16.991l-127.528 53.643 149.689 173.597 242.24 61.094a207.094 207.094 0 0 0-168.33-304.815z"
+					fill="#1490DF" p-id="2993"></path>
+				<path
+					d="M816.111 634.674l-52.865-31.555-121.218-72.599-36.991-22.16-97.552 41.068-186.899 78.595-83.789 35.195-188.72 79.372a254.474 254.474 0 0 0 209.06 109.226h557.518a207.07 207.07 0 0 0 182.311-108.814z"
+					fill="#28A8EA" p-id="2994"></path>
+			</svg>
+			</svg> 强力驱动</p>
+	</footer>
+	<img src="" style="display: none;" id="image" />
+	<script src="//s0.pstatp.com/cdn/expire-1-M/??mdui/0.4.0/js/mdui.min.js,dplayer/1.25.0/DPlayer.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/viewerjs@1.5.0/dist/viewer.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+
+	<script>
+		var RootPath = "{{.RootPath}}";
+		var CurrentPath = "{{.CurrentPath}}";
+		var RawData = "{{.RawData}}";
+		var Reverse = false;
+		var PageData = JSON.parse(window.atob(RawData));
+		var ArrayPath = new Array();
+		var ArrayFloder = new Array();
+		var ArrayFile = new Array();
+		var $$ = mdui.JQ;
+		var Domain = window.location.host;
+		const gallery = new Viewer(document.getElementById('image'));
+		if (CurrentPath === "/") { CurrentPath = "" }
+		for (let item in PageData) {
+			if (item.indexOf("@") == 0) { continue }
+			if (PageData[item]['@type'] == 'file') {
+				ArrayFile.push(PageData[item]);
+			} else if (PageData[item]['@type'] == 'folder') {
+				ArrayFloder.push(PageData[item]);
+			}
+		}
+		function Goto(thePath) { window.location.href = thePath; }
+		function SizeNum(Size) {
+			let dataArray = Size.split(" ", 2);
+			let dataNum = 0;
+			switch (dataArray[1]) {
+				case "B":
+					dataNum = Math.pow(2, 0) * dataArray[0];
+					break;
+				case "KB":
+					dataNum = Math.pow(2, 10) * dataArray[0];
+					break;
+				case "MB":
+					dataNum = Math.pow(2, 20) * dataArray[0];
+					break;
+				case "GB":
+					dataNum = Math.pow(2, 30) * dataArray[0];
+					break;
+				case "TB":
+					dataNum = Math.pow(2, 40) * dataArray[0];
+					break;
+				case "PB":
+					dataNum = Math.pow(2, 50) * dataArray[0];
+					break;
+				default:
+					dataNum = 0;
+			}
+			return dataNum;
+		}
+		function compare(property) {
+			if (property === "size") {
+				return function (a, b) {
+					let value0 = SizeNum(a[property].toUpperCase());
+					let value1 = SizeNum(b[property].toUpperCase());
+					return value0 - value1;
+				}
+			} else {
+				return function (a, b) {
+					let value0 = a[property].toLowerCase();
+					let value1 = b[property].toLowerCase();
+					return value0.localeCompare(value1);
+				}
+			}
+		}
+		function Clear() {
+			let ClassList = new Array("item");
+			for (let item in ClassList) {
+				let Elem = document.getElementsByClassName(ClassList[item]);
+				for (let i = Elem.length - 1; i >= 0; i--) {
+					Elem[i].parentNode.removeChild(Elem[i]);
+				}
+			}
+			let ElemH3 = document.getElementsByTagName("h3")[0];
+			let newH3 = document.createElement("h3");
+			let localPath = CurrentPath.trim().replace(/^\//, "").replace(/\/$/, "");
+			let localHtmlArray = new Array();
+			localHtmlArray.push("<a href='//" + window.location.host + RootPath + "'>" + '<i class="mdui-icon material-icons">home</i>' + "</a>");
+			if (localPath !== "") {
+				let localPathArray = localPath.split("/");
+				let localHref = "";
+				for (let j = 0; j < localPathArray.length; j++) {
+					localHref += "/" + localPathArray[j];
+					if (j === 0 && RootPath !== "/") { continue }
+					localHtmlArray.push("<a href='//" + window.location.host + localHref + "'>" + localPathArray[j] + "</a>");
+				}
+			}
+			ElemH3.innerHTML = localHtmlArray.join(" / ");
+			ArrayPath = localHtmlArray;
+		}
+		function Back() {
+			let Num = ArrayPath.length - 1;
+			let ElemNum = 0;
+			let ElemBack = document.createElement("div");
+			if (Num > 0) { ElemNum = Num - 1; }
+			ElemBack.innerHTML = ArrayPath[ElemNum];
+			return ElemBack.childNodes[0].href
+		}
+		function Search() {
+			let searchVal = document.getElementById("search").value;
+			if (searchVal === undefined) { return; } else { searchVal = searchVal.toString().toLowerCase(); }
+			let ShowArray = document.getElementsByClassName("item");
+			for (i = 0; i < ShowArray.length; i++) {
+				let FocusElem = ShowArray[i].children[0].getElementsByTagName("a");
+				if (FocusElem !== undefined && FocusElem.length === 1) {
+					let newAttr = "table-row";
+					if (FocusElem[0].textContent.toLowerCase().indexOf(searchVal) < 0) { newAttr = "none"; }
+					ShowArray[i].style.display = newAttr;
+				}
+			}
+		}
+		function View(Property) {
+			ArrayFloder.sort(compare(Property));
+			ArrayFile.sort(compare(Property));
+			if (Reverse) {
+				ArrayFloder.reverse();
+				ArrayFile.reverse();
+			}
+			Reverse = !(Reverse);
+			Clear();
+			let Elem = document.getElementsByClassName("list-table")[0];
+			let ArrayItem = ArrayFloder.concat(ArrayFile);
+			for (let item in ArrayItem) {
+				let newChild = document.createElement("tr");
+				let ItemName = decodeURIComponent(ArrayItem[item]['name']),
+					Protocol = (document.location.protocol == 'https:') ? 'https:' : 'http:';
+				let href = Protocol + '//' + Domain + CurrentPath + '/' + ItemName;
+				let FileType = getFileType(ItemName);
+				if (ArrayItem[item]['@type'] == 'folder') {
+					iconHtml = '<i class="mdui-icon material-icons">folder</i>';
+				} else if (ArrayItem[item]['@type'] == 'file') {
+					if (FileType == "video") iconHtml = '<i class="mdui-icon material-icons">ondemand_video</i>';
+					else if (FileType == "image") iconHtml = '<i class="mdui-icon material-icons">image</i>';
+					else if (FileType == "music") iconHtml = '<i class="mdui-icon material-icons">music_note</i>';
+					else iconHtml = '<i class="mdui-icon material-icons">insert_drive_file</i>';
+				} else { continue }
+				newChild.setAttribute('class', 'item');
+				newChild.innerHTML = "<td class=\"file\">" + iconHtml + "<a href='//" + window.location.host + CurrentPath + "/" + ItemName + "'>" + ItemName + "</a></td><td class=\"updated_at\">" + ArrayItem[item]['date'] + "</td><td class=\"size\">" + ArrayItem[item]['size'] + "</td>";
+				Elem.lastChild.appendChild(newChild);
+				newChild.addEventListener('click', function (e) {
+					if (FileType == "video") {
+						$('#staticBackdrop').modal('show');
+						$('#staticBackdropLabel').text(ItemName)
+						dpOpen(href)
+					} else if (FileType == "image") {
+						$$("#image").attr("src", href);
+						gallery.show()
+					} else {
+						window.location.href = href
+					}
+				}, false)
+			}
+		}
+
+		function getFileType(name) {
+			if (!name) return false;
+			let imgType = ['gif', 'jpeg', 'jpg', 'bmp', 'png'],
+				videoType = ['avi', 'wmv', 'mkv', 'mp4', 'mov', '3gp', 'flv', 'mpg', 'rmvb'],
+				textType = ['txt', 'pdf', 'css', 'js', 'text', 'doc', 'docx', 'ppt', 'xml'],
+				musicType = ['wav', 'acc', 'flac', 'ape', 'ogg', 'mp3'];
+			if (RegExp("\.(" + imgType.join("|") + ")$", "i").test(name.toLowerCase())) {
+				return 'image'
+			} else if (RegExp("\.(" + videoType.join("|") + ")$", "i").test(name.toLowerCase())) {
+				return 'video'
+			} else if (RegExp("\.(" + textType.join("|") + ")$", "i").test(name.toLowerCase())) {
+				return 'text'
+			} else if (RegExp("\.(" + musicType.join("|") + ")$", "i").test(name.toLowerCase())) {
+				return 'music'
+			} else {
+				return false
+			}
+		}
+		$("#dclose").click(function () {
+			$$('#dplayerTr').remove();
+			if (dp) { dp.destroy() }
+		})
+		function dpOpen(link) {
+			$$('#dplayerContainer').show();
+			dp = new DPlayer({
+				container: document.getElementById('dplayer'),
+				autoplay: true,
+				video: {
+					url: link,
+				},
+			})
+		}
+		window.onload = View("name");
+	</script>
+</body>
+
+</html>
